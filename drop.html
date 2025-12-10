@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>DROPLY – Smart Water Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ====== BASIC STYLES ====== -->
+    <style>
+        :root {
+            --primary: #1b74d4;
+            --primary-dark: #115293;
+            --accent: #00c9a7;
+            --bg: #f4f7fb;
+            --text: #1a202c;
+            --muted: #6b7280;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ====== LAYOUT ====== */
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: #ffffffcc;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .logo-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.85rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a {
+            position: relative;
+            padding-bottom: 0.15rem;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.2s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid var(--primary);
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        /* ====== HERO ====== */
+
+        .hero {
+            padding: 4rem 0 3rem;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            background: #e0f2ff;
+            color: var(--primary-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.1rem, 3vw, 2.6rem);
+            margin-bottom: 0.75rem;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 0.98rem;
+            max-width: 480px;
+            color: var(--muted);
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-list {
+            list-style: none;
+            display: grid;
+            gap: 0.45rem;
+            margin-bottom: 1.7rem;
+            font-size: 0.95rem;
+        }
+
+        .hero-list li::before {
+            content: "✓";
+            margin-right: 0.35rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .btn-primary, .btn-secondary {
+            border-radius: 999px;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .hero-metrics {
+            margin-top: 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.4rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .hero-metric strong {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            display: block;
+        }
+
+        .hero-card {
+            background: radial-gradient(circle at top left, #e0f2ff, #e5f7f3 50%, #ffffff 90%);
+            border-radius: 1.5rem;
+            padding: 1.8rem 1.7rem;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+            border: 1px solid #dbeafe;
+        }
+
+        .hero-card-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.6rem;
+            color: var(--primary-dark);
+        }
+
+        .hero-card-main {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.9rem;
+        }
+
+        .hero-card-tagline {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.7rem;
+            font-size: 0.8rem;
+        }
+
+        .hero-chip {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 0.8rem;
+            padding: 0.4rem 0.6rem;
+            border: 1px solid #dbeafe;
+        }
+
+        .hero-chip strong {
+            font-size: 0.9rem;
+            margin-right: 0.25rem;
+        }
+
+        .hero-card-footer {
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* ====== SECTION GENERIC ====== */
+
+        section {
+            padding: 3rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-kicker {
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            margin-bottom: 0.3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0.4rem auto 0;
+        }
+
+        /* ====== PROBLEM / SOLUTION ====== */
+
+        .problem-grid, .how-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 1.2rem;
+            padding: 1.4rem 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+        }
+
+        .card h3 {
+            margin-bottom: 0.7rem;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            font-size: 0.92rem;
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .card ul {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .card ul li {
+            margin-bottom: 0.35rem;
+        }
+
+        .card ul li::before {
+            content: "•";
+            color: var(--primary);
+            margin-right: 0.4rem;
+        }
+
+        /* ====== PRODUCTS ====== */
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.8rem;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 1.3rem;
+            padding: 1.4rem 1.5rem 1.6rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--primary-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .product-title {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .product-tagline {
+            font-size: 0.87rem;
+            color: var(--muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .product-price span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--muted);
+            margin-left: 0.25rem;
+        }
+
+        .product-list {
+            list-style: none;
+            font-size: 0.88rem;
+            color: var(--muted);
+            margin-bottom: 0.9rem;
+        }
+
+        .product-list li {
+            margin-bottom: 0.3rem;
+        }
+
+        .product-list li::before {
+            content: "✓";
+            color: var(--accent);
+            margin-right: 0.3rem;
+        }
+
+        .product-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .whatsapp-link {
+            margin-top: 0.3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: #10b981;
+        }
+
+        .whatsapp-link span {
+            font-size: 1.1rem;
+        }
+
+        /* ====== IMPACT / FAQ / CONTACT ====== */
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.3rem;
+            margin-top: 1.4rem;
+        }
+
+        .impact-item {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1rem 1rem;
+            border: 1px solid var(--border);
+            font-size: 0.88rem;
+        }
+
+        .impact-item strong {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.95rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.4rem;
+            margin-top: 1.4rem;
+        }
+
+        .faq-item h3 {
+            font-size: 0.98rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .faq-item p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .contact-card {
+            max-width: 640px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 1.3rem;
+            padding: 1.6rem 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+        }
+
+        .contact-card p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        form {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.55rem 0.7rem;
+            border-radius: 0.6rem;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 90px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.2rem 0 1.4rem;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        footer .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ====== RESPONSIVE ====== */
+
+        @media (max-width: 900px) {
+            .hero-grid,
+            .problem-grid,
+            .how-grid,
+            .products-grid,
+            .impact-grid,
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 3.2rem;
+            }
+
+            .hero-card {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .hero-metrics {
+                flex-direction: column;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-card {
+                padding: 1.4rem 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ====== NAVBAR ====== -->
+    <header>
+        <div class="container">
+            <div class="nav">
+                <a href="#top" class="logo">
+                    <div class="logo-badge">D</div>
+                    <span>DROPLY</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="#how">How it works</a>
+                    <a href="#products">Products</a>
+                    <a href="#impact">Impact</a>
+                    <a href="#faq">FAQ</a>
+                </nav>
+                <a href="#contact" class="nav-cta">Contact us</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="top">
+        <!-- ====== HERO ====== -->
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="badge">
+                        <span class="badge-dot"></span>
+                        WATER OPTIMIZATION & SHARING
+                    </div>
+                    <h1>
+                        Smart faucet & reservoir system
+                        <span>for Algerian homes</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        DROPLY combines a simple flow controller with an intelligent reservoir sensor
+                        to save water, prevent shortages, and increase comfort in daily use.
+                    </p>
+                    <ul class="hero-list">
+                        <li>Reduce water waste from uncontrolled flow and temperature waiting time.</li>
+                        <li>Monitor reservoir level in real time and detect leaks early.</li>
+                        <li>Get alerts and insights directly on your phone (app or WhatsApp integration).</li>
+                    </ul>
+
+                    <div class="hero-actions">
+                        <button class="btn-primary" onclick="scrollToSection('products')">
+                            View products & prices →
+                        </button>
+                        <button class="btn-secondary" onclick="scrollToSection('how')">
+                            See how DROPLY works
+                        </button>
+                    </div>
+
+                    <div class="hero-metrics">
+                        <div class="hero-metric">
+                            <strong>Up to 40%</strong>
+                            less water used with optimized faucet flow.
+                        </div>
+                        <div class="hero-metric">
+                            <strong>24/7</strong>
+                            monitoring of your tank to avoid “no water” surprises.
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="hero-card">
+                    <div class="hero-card-title">DROPLY Faucet System</div>
+                    <div class="hero-card-main">
+                        Save water, optimize reservoirs, <br />enhance comfort.
+                    </div>
+                    <div class="hero-card-tagline">
+                        A low-cost plastic flow controller at the faucet + a smart reservoir sensor with
+                        anomaly detection for leaks.
+                    </div>
+
+                    <div class="hero-card-grid">
+                        <div class="hero-chip">
+                            <strong>Flow Controller</strong><br />
+                            3 mechanical modes, easy to install, fits most taps.
+                        </div>
+                        <div class="hero-chip">
+                            <strong>Reservoir Sensor</strong><br />
+                            Real-time level, leak alerts, AI-based anomaly detection.
+                        </div>
+                        <div class="hero-chip">
+                            <strong>Mobile App</strong><br />
+                            Simple dashboard + notifications (prototype stage).
+                        </div>
+                        <div class="hero-chip">
+                            <strong>For Algeria</strong><br />
+                            Designed for local taps, tanks, and water usage habits.
+                        </div>
+                    </div>
+
+                    <div class="hero-card-footer">
+                        THINK UNLIMITED – Water stewardship & community impact through
+                        technology created by ambitious computer science students in Algeria.
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- ====== PROBLEM / SOLUTION ====== -->
+        <section>
+            <div class="container problem-grid">
+                <div class="card">
+                    <h3>Water waste is a growing challenge</h3>
+                    <p>
+                        Traditional faucets in Algeria waste water every day due to uncontrolled flow, long
+                        temperature waiting time, and lack of awareness.
+                    </p>
+                    <ul>
+                        <li>Uncontrolled high flow from open taps.</li>
+                        <li>Litres lost while waiting for hot water.</li>
+                        <li>No automation or feedback on tank level.</li>
+                        <li>Water bills increase without clear reason.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>What DROPLY changes</h3>
+                    <p>
+                        DROPLY brings together faucet control and reservoir management in a simple,
+                        affordable system that fits existing installations.
+                    </p>
+                    <ul>
+                        <li>Control water usage at the faucet with 3 physical modes.</li>
+                        <li>Monitor tank level continuously and forecast shortages.</li>
+                        <li>Detect abnormal behaviour that may indicate leaks.</li>
+                        <li>Promote sustainable water habits for households and communities.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== HOW IT WORKS ====== -->
+        <section id="how">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">HOW DOES IT WORK?</div>
+                    <h2 class="section-title">DROPLY faucet tip + reservoir sensor</h2>
+                    <p class="section-subtitle">
+                        A simple mechanical controller on the tap and a smart sensor on the tank work together
+                        to avoid waste and keep your water available when you need it.
+                    </p>
+                </div>
+
+                <div class="how-grid">
+                    <div class="card">
+                        <h3>1. Flow controller at the faucet</h3>
+                        <p>
+                            A low-cost plastic head mounted on the faucet. It is not electronic, which
+                            keeps it affordable and robust.
+                        </p>
+                        <ul>
+                            <li>Three modes: full flow, eco flow, and shower/spray mode.</li>
+                            <li>Universal adapters to fit most Algerian faucets.</li>
+                            <li>Reduces splashing and unnecessary high flow.</li>
+                            <li>Easy to install without a plumber.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>2. Smart sensor on the reservoir</h3>
+                        <p>
+                            A sensor installed on the water reservoir measures level in real time and sends
+                            data to our app / server for monitoring and alerts.
+                        </p>
+                        <ul>
+                            <li>Tank level monitoring (e.g. percentage remaining).</li>
+                            <li>Notifications when the tank is low or abnormally empty.</li>
+                            <li>Leak/anomaly detection using a simple AI model.</li>
+                            <li>Historical view to understand consumption over time.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== PRODUCTS & PRICING ====== -->
+        <section id="products">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">PRODUCTS & PRICING</div>
+                    <h2 class="section-title">Choose the right DROPLY option for your home</h2>
+                    <p class="section-subtitle">
+                        You can start with just the faucet controller, or combine it with the reservoir sensor
+                        for complete water optimization.
+                    </p>
+                </div>
+
+                <div class="products-grid">
+                    <!-- PRODUCT 1 – FLOW CONTROLLER -->
+                    <article class="product-card">
+                        <div>
+                            <div class="product-label">Product 1</div>
+                            <div class="product-title">DROPLY Flow Controller (Plastic Head)</div>
+                            <div class="product-tagline">
+                                Low-cost faucet tip with 3 manual modes to reduce everyday water waste.
+                            </div>
+                            <!-- You can change the price here -->
+                            <div class="product-price">
+                                800 DA
+                                <span>per unit (suggested price)</span>
+                            </div>
+
+                            <ul class="product-list">
+                                <li>Made of durable plastic – no electronics inside.</li>
+                                <li>3 mechanical flow modes (full, eco, spray).</li>
+                                <li>Universal adapter rings to fit most taps.</li>
+                                <li>Ideal first step for families and small businesses.</li>
+                            </ul>
+                        </div>
+
+                        <div class="product-footer">
+                            <button class="btn-primary" onclick="openWhatsApp('Flow Controller')">
+                                Order via WhatsApp
+                            </button>
+                            <div>
+                                Minimum order for prototype: 10 units (you can change this text).
+                            </div>
+                            <a class="whatsapp-link" href="https://wa.me/213600000000" target="_blank">
+                                <span>⦿</span> Chat with the team on WhatsApp
+                            </a>
+                        </div>
+                    </article>
+
+                    <!-- PRODUCT 2 – RESERVOIR SENSOR -->
+                    <article class="product-card">
+                        <div>
+                            <div class="product-label">Product 2</div>
+                            <div class="product-title">DROPLY Reservoir Sensor</div>
+                            <div class="product-tagline">
+                                Smart level monitoring and anomaly detection for your water tank.
+                            </div>
+                            <!-- You said ~5000 DA for the sensor; adjust if needed -->
+                            <div class="product-price">
+                                5000 DA
+                                <span>per sensor (prototype estimate)</span>
+                            </div>
+
+                            <ul class="product-list">
+                                <li>Real-time measurement of water level.</li>
+                                <li>Low-level alerts before the tank runs empty.</li>
+                                <li>Leak / anomaly detection using an AI model.</li>
+                                <li>Simple mobile / web interface for insights.</li>
+                            </ul>
+                        </div>
+
+                        <div class="product-footer">
+                            <button class="btn-primary" onclick="openWhatsApp('Reservoir Sensor')">
+                                Request a demo
+                            </button>
+                            <div>
+                                Ideal for houses, small buildings, and community reservoirs.
+                            </div>
+                            <a class="whatsapp-link" href="https://wa.me/213600000000" target="_blank">
+                                <span>⦿</span> Ask for technical details on WhatsApp
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== IMPACT ====== -->
+        <section id="impact">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">IMPACT</div>
+                    <h2 class="section-title">Water stewardship & community impact</h2>
+                    <p class="section-subtitle">
+                        DROPLY is not only about saving litres of water. It is about building awareness and
+                        supporting communities facing shortages.
+                    </p>
+                </div>
+
+                <div class="impact-grid">
+                    <div class="impact-item">
+                        <strong>Save up to 40% water</strong>
+                        By controlling faucet flow and understanding how much you consume, families can
+                        reduce unnecessary usage without changing their lifestyle radically.
+                    </div>
+                    <div class="impact-item">
+                        <strong>Fewer “no water” days</strong>
+                        Early reservoir alerts help households fill the tank in time and plan around
+                        water cuts, especially in summer.
+                    </div>
+                    <div class="impact-item">
+                        <strong>Local innovation</strong>
+                        Designed and built by Algerian computer science students, DROPLY responds to real
+                        needs in local cities and neighbourhoods.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== FAQ ====== -->
+        <section id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">FAQ</div>
+                    <h2 class="section-title">Frequently asked questions</h2>
+                    <p class="section-subtitle">
+                        Some common questions your customers and investors might ask about the DROPLY system.
+                    </p>
+                </div>
+
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>Do I need a plumber to install DROPLY?</h3>
+                        <p>
+                            The flow controller can usually be installed by the user in a few minutes
+                            using the provided adapters. The reservoir sensor may require basic drilling
+                            or mounting; we recommend technician support for the first installations.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Does the flow controller need electricity?</h3>
+                        <p>
+                            No. The controller head is purely mechanical and made of plastic. It does
+                            not require power, which makes it cheaper and more robust.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>How do I receive alerts from the reservoir sensor?</h3>
+                        <p>
+                            The prototype sends data to a simple mobile/web dashboard. In the future,
+                            you can connect it to WhatsApp or SMS for notifications when the level is
+                            low or when an anomaly is detected.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I buy only one of the products?</h3>
+                        <p>
+                            Yes. You can start with just the flow controller, just the sensor, or both.
+                            The full system offers the best optimisation, but each product already
+                            creates value on its own.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== CONTACT ====== -->
+        <section id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">CONTACT</div>
+                    <h2 class="section-title">Interested in DROPLY?</h2>
+                    <p class="section-subtitle">
+                        For prototype orders, collaboration, or investment opportunities, send us a message.
+                    </p>
+                </div>
+
+                <div class="contact-card">
+                    <p>
+                        Fill in the form and the DROPLY team will get back to you. For faster responses,
+                        you can also contact us by WhatsApp using the buttons above.
+                    </p>
+
+                    <form id="contact-form">
+                        <div>
+                            <label for="name">Name</label>
+                            <input id="name" type="text" placeholder="Your full name" required />
+                        </div>
+                        <div>
+                            <label for="email">Email or phone</label>
+                            <input id="email" type="text" placeholder="example@mail.com / +213..." required />
+                        </div>
+                        <div>
+                            <label for="type">I am interested as</label>
+                            <input id="type" type="text" placeholder="Household / Building manager / Investor / Other" />
+                        </div>
+                        <div>
+                            <label for="message">Message</label>
+                            <textarea id="message" placeholder="Tell us about your project or your question..." required></textarea>
+                        </div>
+                        <div>
+                            <button class="btn-primary" type="submit">Send message</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ====== FOOTER ====== -->
+    <footer>
+        <div class="container footer-inner">
+            <div>© 2025 DROPLY – Water Optimization & Sharing. THINK UNLIMITED.</div>
+            <div>Built by computer science students – Faculty of Exact Sciences, UDL SBA.</div>
+        </div>
+    </footer>
+
+    <!-- ====== SIMPLE JS ====== -->
+    <script>
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        function openWhatsApp(productName) {
+            // Replace with your real WhatsApp number (international format, no + sign in text)
+            const phone = "213600000000"; // TODO: put your real number here
+            const msg = encodeURIComponent(
+                "Hello, I am interested in DROPLY (" + productName + "). Can you give me more details?"
+            );
+            window.open("https://wa.me/" + phone + "?text=" + msg, "_blank");
+        }
+
+        // Fake form handling – frontend only
+        const form = document.getElementById("contact-form");
+        if (form) {
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                alert(
+                    "Thank you for your message! (In the real version, this form will send your data to the DROPLY team.)"
+                );
+                form.reset();
+            });
+        }
+    </script>
+</body>
+</html>
